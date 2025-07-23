@@ -18,7 +18,7 @@ interface GetOneParams {
 }
 
 export const PostsService = {
-  async getAll({ searchTerm, options = { revalidate: 60 } }: GetAllParams = {}): Promise<PostData[]> {
+  async getAll({ searchTerm, options }: GetAllParams = {}): Promise<PostData[]> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_POSTS_URL}?${searchTerm}`, {
       next: {
         revalidate: options?.revalidate,
@@ -31,7 +31,7 @@ export const PostsService = {
     return data.data || [];
   },
 
-  async getOne({ id, searchTerm, options = { revalidate: 60 } }: GetOneParams): Promise<PostData> {
+  async getOne({ id, searchTerm, options }: GetOneParams): Promise<PostData> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_POSTS_URL}/${id}?${searchTerm}`, {
       next: {
         revalidate: options?.revalidate,
