@@ -1,13 +1,25 @@
+import { PostProps } from '@/app/layout';
 import Comments from '@/app/ui/comments';
 import Details from '@/app/ui/details';
 import Heading from '@/app/ui/heading';
 import Paragraph from '@/app/ui/paragraph';
 import { PostsService } from '@/services/posts-service';
+import { RomanNumeralConverter } from '@/services/roman-numeral-converter';
 import { PostContent } from '@/types/post';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import { Container } from './styles';
 
-export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: PostProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await PostsService.getOne({ id: slug, searchTerm: 'populate=*' });
+
+  return {
+    title: `${RomanNumeralConverter.getAge()} | ${post.title}`,
+  };
+}
+
+export default async function Post({ params }: PostProps) {
   const { slug } = await params;
   const post = await PostsService.getOne({ id: slug, searchTerm: 'populate=*' });
   const content = post.content;
