@@ -7,12 +7,10 @@ import { PostContent } from '@/types/post';
 import Image from 'next/image';
 import { Container } from './styles';
 
-export default async function Post({ params }: { params: { slug: string } }) {
+export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await PostsService.getOne({ id: slug, searchTerm: 'populate=*' });
   const content = post.content;
-
-  console.log(post);
 
   const handleListOrder = (list: PostContent, index: number) => {
     return list.format === 'ordered' ? (
